@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disease predictor</title>
+</head>
+<style>
+    .form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .result {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+</style>
+
+<body>
+
+    <div class="form">
+        <input type="text" placeholder="Your name" id="name">
+        <select name="symptom" id="symptom">
+        </select>
+        <input type="text" placeholder="How many days ?" id="days">
+
+        <button id="ask">Ask</button>
+    </div>
+
+    <div class="result">
+        <div id="disease"></div>
+        <div id="condition"></div>
+        <div id="description"></div>
+        <ul id="precaution-list"></ul>
+    </div>
+
+</body>
+<script>
+
+    async function main() {
+        await renderSymptoms()
+
+        document.getElementById("ask").addEventListener("click", predictDisease)
+
+    }
+
+    async function renderSymptoms() {
+        const symptomContainer = document.getElementById("symptom");
+        const symptomRes = await fetch("/symptoms");
+        const symptomData = await symptomRes.json();
+
+        symptomData.sort().forEach(item => {
+            symptomContainer.innerHTML += `<option value='${item}' >${item}</option>`
+        })
+
+    }
+
+    async function predictDisease(e) {
+
+        const name = document.getElementById("name").value;
+        const symptom = document.getElementById("symptom").value;
+        const days = document.getElementById("days").value;
+
+        const res = await fetch("/process_string", {
+            method: "POST",
+            headers: {
+                "content-type": "application/json"
+            },
+            body: JSON.stringify({ disease: symptom, days })
+        });
+        const data = await res.json();
+        
+        if(data.error) return alert(data.error);
+
+        document.getElementById("disease").innerHTML = `<h3>Dear ${name} you can be suffering from ${data.disease}.</h3>`
+        document.getElementById("condition").innerHTML = `<b>Severity:</b> ${data.condition}`
+        document.getElementById("description").innerHTML = `<b>Disease description:</b>${data.description}`
+
+        document.getElementById("precaution-list").innerHTML = `<b>Follow these precautions:</b>`
+        data.precution_list.forEach(item => {
+            document.getElementById("precaution-list").innerHTML += `<li>${item}</li>`
+        })
+
+
+    }
+
+
+
+    main()
+
+</script>
+
+</html>
