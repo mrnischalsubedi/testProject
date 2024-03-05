@@ -7,7 +7,7 @@ This Python code implements a Health Diagnosis Chatbot that uses Machine Learnin
 Before running the code, make sure you have the following:
 
 Python (version 3.x) installed on your system.
-Required Python packages: pandas, pyttsx3, scikit-learn.
+Required Python packages: pandas, scikit-learn.
 
 ## Dataset
 
@@ -18,7 +18,7 @@ The code uses two CSV files for training and testing data:
 
 ## Running the code
 
-1. clone the repository - `git clone https://github.com/Churanta/Health-Diagnosis-Chatbot-using-Machine-Learning.git`
+1. clone the repo
 2. Open the file
 3. Run the command `pip install -r requirements.txt`.
 4. Now run the python file .
@@ -35,9 +35,6 @@ The code uses two machine learning models:
 
 The code calculates feature importance using the Decision Tree model to identify the most crucial symptoms for predicting health conditions.
 
-## Text-to-Speech (TTS) Output
-
-The code uses the pyttsx3 library to provide text-to-speech output for the diagnosis and health condition suggestions.
 
 ## Usage
 
@@ -57,11 +54,3 @@ This Health Diagnosis ChatBot is a basic implementation and can be further impro
 3. Utilize a larger and more diverse dataset to improve prediction capabilities.
 4. Incorporate natural language processing (NLP) techniques to better understand user inputs.
 
-## Video demonstration
-https://github.com/Churanta/Health-Diagnosis-Chatbot-using-Machine-Learning/assets/83538805/47f00eea-8c36-49e8-9654-0e7a8d89ec4d
-
-
-
-### Please note that this project is for educational purposes and should not be used as a substitute for professional medical advice. Always consult a qualified healthcare professional for accurate diagnosis and treatment.
-
-### Feel free to explore and expand upon this Health Diagnosis ChatBot to make it more comprehensive and robust.
