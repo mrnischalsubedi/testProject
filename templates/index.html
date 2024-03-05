@@ -124,8 +124,6 @@
         <!-- Mockup dropdowns are for visual symmetry and have no functionality -->
         <div class="input-box"><select id="mockSymptom1"><option value="">Mock Symptom 1</option></select></div>
         <div class="input-box"><select id="mockSymptom2"><option value="">Mock Symptom 2</option></select></div>
-        <div class="input-box"><select id="mockSymptom3"><option value="">Mock Symptom 3</option></select></div>
-        <div class="input-box"><select id="mockSymptom4"><option value="">Mock Symptom 4</option></select></div>
         <div class="input-box">
             <input type="text" id="days" placeholder="Number of days">
         </div>
@@ -154,8 +152,6 @@
             const mockSymptomContainers = [
                 document.getElementById("mockSymptom1"),
                 document.getElementById("mockSymptom2"),
-                document.getElementById("mockSymptom3"),
-                document.getElementById("mockSymptom4")
             ];
             const symptomRes = await fetch("/symptoms");
             const symptomData = await symptomRes.json();
@@ -174,12 +170,21 @@
             const symptom = document.getElementById("symptom").value;
             const days = document.getElementById("days").value;
 
+            const mockSymptomContainers = [
+                document.getElementById("mockSymptom1"),
+                document.getElementById("mockSymptom2")
+            ];
+
+            let other_symptoms = mockSymptomContainers.map(eachContainer => {
+                return eachContainer.value
+            })
+
             const res = await fetch("/process_string", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ disease: symptom, days })
+                body: JSON.stringify({ disease: symptom, days, other_symptoms })
             });
             if (!res.ok) {
                 const errorText = await res.text();

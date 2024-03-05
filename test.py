@@ -248,13 +248,18 @@ def tree_to_code(tree, feature_names, disease, other_symptoms,days):
     return recurse(0,1)
 
 
-def predict_disease(disease, other_symptoms ,days):
+def predict_disease(disease,  other_symptoms ,days):
     other_symptoms = pd.Index(other_symptoms)
     getSeverityDict()
     getDescription()
     getprecautionDict()
     return tree_to_code(clf,cols, disease, other_symptoms,days)
 
+predict_disease("headache", ["itching",
+    "skin_rash",
+    "nodal_skin_eruptions",
+    "continuous_sneezing",
+    "shivering"] ,5)
 
 def symptoms():
     return generate_symptoms_list(clf, cols)

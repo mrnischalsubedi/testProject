@@ -13,6 +13,10 @@ def your_function(input_str: str) -> dict:
     }
 
 @app.route('/')
+def login():
+    return render_template('login.html')
+
+@app.route('/chat')
 def home():
     return render_template('index.html')
 
@@ -22,8 +26,9 @@ def process_string():
         input_data = request.json
         disease = input_data["disease"]
         days =  int(input_data["days"])
+        other_symptoms =  input_data["other_symptoms"]
         
-        result = predict_disease(disease, days)
+        result = predict_disease(disease,other_symptoms, days )
         return jsonify(result)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
