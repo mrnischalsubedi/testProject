@@ -5,102 +5,110 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Disease Predictor Chatbot</title>
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+       body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
 
-        .chatbox {
-            background-color: #fff;
-            width: 80%;
-            max-width: 960px;
-            border-radius: 8px;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
+.chatbox {
+    background-color: #fff;
+    width: 80%;
+    max-width: 960px;
+    border-radius: 8px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
 
-        .chat-header {
-            background-color: #007bff;
-            color: white;
-            padding: 15px;
-            text-align: center;
-        }
+.chat-header {
+    background-color: #6a7682;
+    color: white;
+    padding: 15px;
+    text-align: center;
+}
 
-        .chat-header h2 {
-            margin: 0;
-        }
+.chat-header h2 {
+    margin: 0;
+}
 
-        .chat-message-bot {
-            background-color: #e9e9eb;
-            padding: 15px;
-            margin: 15px;
-            border-radius: 20px;
-            max-width: 70%;
-        }
+.chat-message-bot {
+    background-color: #e9e9eb;
+    padding: 15px;
+    margin: 15px;
+    border-radius: 20px;
+    max-width: 70%;
+}
 
-        .user-input-area {
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
+.user-input-area {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: #f8f9fa; /* Add background color to the input area */
+    border-radius: 8px; /* Add border radius to match the chatbox */
+    margin: 0 15px 15px 15px; /* Add margin to separate from the chat message and chat result */
+}
 
-        .input-box {
-            padding: 10px;
-            border-radius: 20px;
-            border: 1px solid #ddd;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+.input-box {
+    padding: 10px;
+    border-radius: 20px;
+    /* border: 1px solid #ddd; */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: end;
+}
 
-        .input-box input, .input-box select {
-            flex: 1;
-            padding: 10px;
-            border-radius: 20px;
-            border: 1px solid #ddd;
-        }
+.input-box input, .input-box select {
+    flex: 1;
+    padding: 10px;
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    outline: none; /* Remove double outline */
+}
 
-        .send-btn {
-            padding: 10px 20px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: bold;
-        }
+.send-btn {
+    padding: 10px 20px;
+    background-color: #6a7682;
+    color: white;
+    border: none;
+    outline: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    align-self: flex-end; /* Align the send button to the right */
+}
 
-        .send-btn:hover {
-            background-color: #218838;
-        }
+.send-btn:hover {
+    background-color: #32393f;
+}
 
-        .chat-result {
-            padding: 15px;
-            background-color: #f8f9fa;
-        }
+.chat-result {
+    padding: 15px;
+    background-color: #f8f9fa;
+}
 
-        .chat-result h3, .chat-result b {
-            margin: 0;
-        }
+.chat-result h3, .chat-result b {
+    margin: 0;
+}
 
-        .chat-result ul {
-            list-style: none;
-            padding: 0;
-        }
+.chat-result ul {
+    list-style: none;
+    padding: 0;
+}
 
-        .chat-result ul li {
-            background-color: #fff;
-            padding: 5px 10px;
-            margin-bottom: 5px;
-            border-radius: 10px;
-        }
+.chat-result ul li {
+    background-color: #fff;
+    padding: 5px 10px;
+    margin-bottom: 5px;
+    border-radius: 10px;
+}
+
     </style>
 </head>
 <body>
@@ -119,11 +127,11 @@
             <input type="text" id="name" placeholder="Enter your name">
         </div>
         <div class="input-box">
-            <select id="symptom"></select>
+            <select id="symptom"><option value="">Symptom</option></select>
         </div>
         <!-- Mockup dropdowns are for visual symmetry and have no functionality -->
-        <div class="input-box"><select id="mockSymptom1"><option value="">Mock Symptom 1</option></select></div>
-        <div class="input-box"><select id="mockSymptom2"><option value="">Mock Symptom 2</option></select></div>
+        <div class="input-box"><select id="mockSymptom1"><option value="">Other Symptom</option></select></div>
+        <div class="input-box"><select id="mockSymptom2"><option value="">Other Symptom</option></select></div>
         <div class="input-box">
             <input type="text" id="days" placeholder="Number of days">
         </div>
