@@ -1,97 +1,211 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Disease predictor</title>
+    <title>Disease Predictor Chatbot</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .chatbox {
+            background-color: #fff;
+            width: 80%;
+            max-width: 960px;
+            border-radius: 8px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background-color: #007bff;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .chat-header h2 {
+            margin: 0;
+        }
+
+        .chat-message-bot {
+            background-color: #e9e9eb;
+            padding: 15px;
+            margin: 15px;
+            border-radius: 20px;
+            max-width: 70%;
+        }
+
+        .user-input-area {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .input-box {
+            padding: 10px;
+            border-radius: 20px;
+            border: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-box input, .input-box select {
+            flex: 1;
+            padding: 10px;
+            border-radius: 20px;
+            border: 1px solid #ddd;
+        }
+
+        .send-btn {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .send-btn:hover {
+            background-color: #218838;
+        }
+
+        .chat-result {
+            padding: 15px;
+            background-color: #f8f9fa;
+        }
+
+        .chat-result h3, .chat-result b {
+            margin: 0;
+        }
+
+        .chat-result ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .chat-result ul li {
+            background-color: #fff;
+            padding: 5px 10px;
+            margin-bottom: 5px;
+            border-radius: 10px;
+        }
+    </style>
 </head>
-<style>
-    .form {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-    }
-
-    .result {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-    }
-</style>
-
 <body>
 
-    <div class="form">
-        <input type="text" placeholder="Your name" id="name">
-        <select name="symptom" id="symptom">
-        </select>
-        <input type="text" placeholder="How many days ?" id="days">
-
-        <button id="ask">Ask</button>
+<div class="chatbox">
+    <div class="chat-header">
+        <h2>Health-Mate Chatbot</h2>
     </div>
 
-    <div class="result">
+    <div class="chat-message-bot">
+        <p>Welcome to Health-Mate chatbot. Please input the following requirements for us to help you with your conditions.</p>
+    </div>
+
+    <div class="user-input-area">
+        <div class="input-box">
+            <input type="text" id="name" placeholder="Enter your name">
+        </div>
+        <div class="input-box">
+            <select id="symptom"></select>
+        </div>
+        <!-- Mockup dropdowns are for visual symmetry and have no functionality -->
+        <div class="input-box"><select id="mockSymptom1"><option value="">Mock Symptom 1</option></select></div>
+        <div class="input-box"><select id="mockSymptom2"><option value="">Mock Symptom 2</option></select></div>
+        <div class="input-box"><select id="mockSymptom3"><option value="">Mock Symptom 3</option></select></div>
+        <div class="input-box"><select id="mockSymptom4"><option value="">Mock Symptom 4</option></select></div>
+        <div class="input-box">
+            <input type="text" id="days" placeholder="Number of days">
+        </div>
+        <div class="input-box">
+            <button class="send-btn" id="ask">Send</button>
+        </div>
+    </div>
+
+    <div class="chat-result" id="chat-result">
         <div id="disease"></div>
         <div id="condition"></div>
         <div id="description"></div>
         <ul id="precaution-list"></ul>
     </div>
+</div>
+
+
+    <script>
+        async function main() {
+            await renderSymptoms();
+            document.getElementById("ask").addEventListener("click", predictDisease);
+        }
+
+        async function renderSymptoms() {
+            const symptomContainer = document.getElementById("symptom");
+            const mockSymptomContainers = [
+                document.getElementById("mockSymptom1"),
+                document.getElementById("mockSymptom2"),
+                document.getElementById("mockSymptom3"),
+                document.getElementById("mockSymptom4")
+            ];
+            const symptomRes = await fetch("/symptoms");
+            const symptomData = await symptomRes.json();
+
+            symptomData.sort().forEach(item => {
+                const optionHTML = `<option value='${item}'>${item}</option>`;
+                symptomContainer.innerHTML += optionHTML;
+                mockSymptomContainers.forEach(container => {
+                    container.innerHTML += optionHTML; // Populating mock dropdowns
+                });
+            });
+        }
+
+        async function predictDisease(e) {
+            const name = document.getElementById("name").value;
+            const symptom = document.getElementById("symptom").value;
+            const days = document.getElementById("days").value;
+
+            const res = await fetch("/process_string", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ disease: symptom, days })
+            });
+            if (!res.ok) {
+                const errorText = await res.text();
+                alert(`Server error: ${errorText}`);
+                return;
+            }
+            const data = await res.json();
+            
+            if(data.error) {
+                alert(data.error);
+                return;
+            }
+
+            document.getElementById("disease").innerHTML = `<h3>Dear ${name}, you may be suffering from ${data.disease}.</h3>`;
+            document.getElementById("condition").innerHTML = `<b>Severity:</b> ${data.condition}`;
+            document.getElementById("description").innerHTML = `<b>Description:</b> ${data.description}`;
+
+            const precautionList = document.getElementById("precaution-list");
+            precautionList.innerHTML = `<b>Precautions:</b>`;
+            data.precaution_list.forEach(item => {
+                precautionList.innerHTML += `<li>${item}</li>`;
+            });
+        }
+
+        main();
+    </script>
 
 </body>
-<script>
-
-    async function main() {
-        await renderSymptoms()
-
-        document.getElementById("ask").addEventListener("click", predictDisease)
-
-    }
-
-    async function renderSymptoms() {
-        const symptomContainer = document.getElementById("symptom");
-        const symptomRes = await fetch("/symptoms");
-        const symptomData = await symptomRes.json();
-
-        symptomData.sort().forEach(item => {
-            symptomContainer.innerHTML += `<option value='${item}' >${item}</option>`
-        })
-
-    }
-
-    async function predictDisease(e) {
-
-        const name = document.getElementById("name").value;
-        const symptom = document.getElementById("symptom").value;
-        const days = document.getElementById("days").value;
-
-        const res = await fetch("/process_string", {
-            method: "POST",
-            headers: {
-                "content-type": "application/json"
-            },
-            body: JSON.stringify({ disease: symptom, days })
-        });
-        const data = await res.json();
-        
-        if(data.error) return alert(data.error);
-
-        document.getElementById("disease").innerHTML = `<h3>Dear ${name} you can be suffering from ${data.disease}.</h3>`
-        document.getElementById("condition").innerHTML = `<b>Severity:</b> ${data.condition}`
-        document.getElementById("description").innerHTML = `<b>Disease description:</b>${data.description}`
-
-        document.getElementById("precaution-list").innerHTML = `<b>Follow these precautions:</b>`
-        data.precution_list.forEach(item => {
-            document.getElementById("precaution-list").innerHTML += `<li>${item}</li>`
-        })
-
-
-    }
-
-
-
-    main()
-
-</script>
-
 </html>
